@@ -2,11 +2,17 @@
   <header class="catalog-header">
     <h1>Notre catalogue</h1>
     <p>Choisissez votre prochaine lecture.</p>
+    <label for="stock-filter">Filtrer le stock :</label>
+    <select id="stock-filter" [value]="filterStock" (change)="filterStock = $any($event.target).value">
+      <option value="all">Tout</option>
+      <option value="inStock">En stock</option>
+      <option value="outOfStock">En rupture</option>
+    </select>
   </header>
 
   <section class="book-grid" aria-label="Liste des livres">
-    @for (book of books; track book.title) {
-      <mat-card class="book-card">
+    @for (book of getFilteredBooks(); track book.title) {
+      <mat-card class="book-card" [class.out-of-stock]="book.quantity === 0">
         <img mat-card-image [src]="book.image" [alt]="'Couverture de ' + book.title" />
         <mat-card-header>
           <mat-card-title>{{ book.title }}</mat-card-title>
@@ -14,16 +20,33 @@
         </mat-card-header>
         <mat-card-content>
           <p class="price">{{ book.price | number: '1.2-2' }} €</p>
-          @if (book.inStock) {
+          @if (book.quantity > 0) {
             <span class="stock stock-available">En stock</span>
           } @else {
             <span class="stock stock-unavailable">Rupture</span>
           }
+          <p class="quantity">Quantité : {{ book.quantity }}</p>
+          <div class="stock-controls">
+            <button mat-stroked-button type="button" (click)="decrementStock(book)" aria-label="Retirer une unité">
+              -
+            </button>
+            <button mat-stroked-button type="button" (click)="incrementStock(book)" aria-label="Ajouter une unité">
+              +
+            </button>
+          </div>
+          <button mat-button type="button" (click)="book.showDetails = !book.showDetails">
+            {{ book.showDetails ? 'Masquer les détails' : 'Afficher les détails' }}
+          </button>
+          @if (book.showDetails) {
+            <p class="details">ID interne : {{ book.id }}</p>
+          }
         </mat-card-content>
         <mat-card-actions>
-          <button mat-flat-button color="primary" [disabled]="!book.inStock" (click)="buyBook(book)">
-            Acheter
-          </button>
+          @if (book.quantity > 0) {
+            <button mat-flat-button color="primary" [disabled]="book.quantity === 0" (click)="buyBook(book)">
+              Acheter
+            </button>
+          }
         </mat-card-actions>
       </mat-card>
     }
