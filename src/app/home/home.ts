@@ -1,0 +1,11 @@
+import { Component } from '@angular/core';
+import { MatButtonModule } from '@angular/material/button';
+import { RouterLink } from '@angular/router';
+
+@Component({
+  imports: [MatButtonModule, RouterLink],
+  selector: 'app-home',
+  styleUrl: './home.css',
+  templateUrl: './home.html',
+})
+export class Home {}

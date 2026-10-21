@@ -1,0 +1,14 @@
+.home {
+  max-width: 720px;
+  margin: 5rem auto;
+  padding: 2rem;
+  text-align: center;
+}
+
+.home h1 {
+  margin-bottom: 1rem;
+}
+
+.home p {
+  margin-bottom: 2rem;
+}

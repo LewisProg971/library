@@ -1,0 +1,31 @@
+<main class="catalog">
+  <header class="catalog-header">
+    <h1>Notre catalogue</h1>
+    <p>Choisissez votre prochaine lecture.</p>
+  </header>
+
+  <section class="book-grid" aria-label="Liste des livres">
+    @for (book of books; track book.title) {
+      <mat-card class="book-card">
+        <img mat-card-image [src]="book.image" [alt]="'Couverture de ' + book.title" />
+        <mat-card-header>
+          <mat-card-title>{{ book.title }}</mat-card-title>
+          <mat-card-subtitle>{{ book.author }}</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+          <p class="price">{{ book.price | number: '1.2-2' }} €</p>
+          @if (book.inStock) {
+            <span class="stock stock-available">En stock</span>
+          } @else {
+            <span class="stock stock-unavailable">Rupture</span>
+          }
+        </mat-card-content>
+        <mat-card-actions>
+          <button mat-flat-button color="primary" [disabled]="!book.inStock" (click)="buyBook(book)">
+            Acheter
+          </button>
+        </mat-card-actions>
+      </mat-card>
+    }
+  </section>
+</main>
